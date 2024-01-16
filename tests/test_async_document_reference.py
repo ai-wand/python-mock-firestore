@@ -119,6 +119,16 @@ class TestAsyncDocumentReference(aiounittest.AsyncTestCase):
         doc = await fs.collection("foo").document("bar").get()
         self.assertEqual({"id": "bar"}, doc.to_dict())
 
+
+    async def test_document_create_setsContentOfDocument(self):
+        fs = AsyncMockFirestore()
+        fs._data = {"foo": {}}
+        doc_content = {"id": "bar"}
+        await fs.collection("foo").document("bar").create(doc_content)
+        doc = await fs.collection("foo").document("bar").get()
+        self.assertEqual(doc_content, doc.to_dict())
+
+
     async def test_document_update_addNewValue(self):
         fs = AsyncMockFirestore()
         fs._data = {"foo": {"first": {"id": 1}}}
